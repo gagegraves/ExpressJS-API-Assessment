@@ -5,7 +5,7 @@ const sortData = require("../utils/sortPosts");
 //middleware to confirm only proper query parameters are accepted
 function validateQuery(req, res, next) {
   const { query } = req;
-  const VALID_QUERIES = ["tag", "sortBy", "direction"];
+  const VALID_QUERIES = ["tags", "sortBy", "direction"];
   const VALID_SORTS = ["id", "likes", "popularity", "reads"];
   const VALID_DIRECTIONS = ["asc", "desc"];
 
@@ -19,10 +19,10 @@ function validateQuery(req, res, next) {
     }
   }
   //if tag query is missing, return 400
-  if (!query.tag) {
+  if (!query.tags) {
     return next({
       status: 400,
-      message: "Tag parameter is required.",
+      message: "Tags parameter is required.",
     });
   }
   //if sortBy query is invalid, return 400
@@ -48,8 +48,8 @@ function validateQuery(req, res, next) {
 }
 
 async function getPosts(req, res, next) {
-  const { tag, sortBy, direction } = req.query;
-  const apiResponse = await service.getPostsByTag(tag);
+  const { tags, sortBy, direction } = req.query;
+  const apiResponse = await service.getPostsByTag(tags);
   const result = sortData(apiResponse, sortBy, direction);
   res.json(result);
 }
