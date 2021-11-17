@@ -2,7 +2,7 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./posts.service");
 const sortData = require("../utils/sortPosts");
 
-//middleware to confirm only proper query parameters are accepted
+//middleware to validate our url query params
 function validateQuery(req, res, next) {
   const { query } = req;
   const VALID_QUERIES = ["tags", "sortBy", "direction"];
@@ -14,15 +14,15 @@ function validateQuery(req, res, next) {
     if (!VALID_QUERIES.includes(field)) {
       return next({
         status: 400,
-        message: `Invalid query parameter: '${field}'`,
+        message: `invalid query parameter: '${field}'`,
       });
     }
   }
-  //if tag query is missing, return 400
+  //if 'tags' query is missing, return 400
   if (!query.tags) {
     return next({
       status: 400,
-      message: "Tags parameter is required.",
+      message: "tags parameter is required.",
     });
   }
   //if sortBy query is invalid, return 400
@@ -30,7 +30,7 @@ function validateQuery(req, res, next) {
     if (!VALID_SORTS.includes(query.sortBy)) {
       return next({
         status: 400,
-        message: `Invalid sortBy parameter: '${query.sortBy}'`,
+        message: `invalid sortBy parameter: '${query.sortBy}'`,
       });
     }
   }
@@ -39,7 +39,7 @@ function validateQuery(req, res, next) {
     if (!VALID_DIRECTIONS.includes(query.direction)) {
       return next({
         status: 400,
-        message: `Invalid direction parameter: '${query.direction}'`,
+        message: `invalid direction parameter: '${query.direction}'`,
       });
     }
   }
@@ -47,11 +47,14 @@ function validateQuery(req, res, next) {
   next();
 }
 
+//sends request to service for data, then sorts and returns it based on query params
 async function getPosts(req, res, next) {
   const { tags, sortBy, direction } = req.query;
+  //api call
   const apiResponse = await service.getPostsByTag(tags);
+  //sort function in ../utils/sortPosts.js
   const result = sortData(apiResponse, sortBy, direction);
-  res.json(result);
+  res.status(200).json(result);
 }
 
 module.exports = {

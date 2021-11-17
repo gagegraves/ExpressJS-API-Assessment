@@ -1,7 +1,15 @@
-function sortData(data, sortTag, direction) {
-  if (sortTag) {
+/**
+ * 
+ * @param {*} data is the data object containing all the posts
+ * @param {*} sortType is the type to sort by
+ * @param {*} direction is either asc or desc 
+ * @returns sorted posts in data object
+ */
+
+function sortData(data, sortType, direction) {
+  if (sortType) {
       //switch case to sort posts
-    switch (sortTag) {
+    switch (sortType) {
       case "id":
         data.posts.sort((var1, var2) => var1.id - var2.id);
         break;
