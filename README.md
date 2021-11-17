@@ -1,4 +1,4 @@
-# Express/NodeJS API written for Copy.ai Junior Fullstack Position, by Gage Graves
+# Express/NodeJS API written for Junior Fullstack Position, by Gage Graves
 
 ## installation:
 (run commands in root directory)
